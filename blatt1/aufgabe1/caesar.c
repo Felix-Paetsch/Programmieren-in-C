@@ -1,14 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// ceasar.exe <offset> <to_encode>
+void caesar_chiffre(int k, const char *msg);
+
+// ceasar.exe <offset> <to_encode>[]
 int main(int argc, const char *argv[]) {
 	if (argc < 2) { exit(-1); }
 	
 	// Stores the defined offset into k
 	int k = strtol(argv[1], NULL, 10) % 26;
 	
-	const char *remaining_text = argv[2];
+	for (int i = 2; i < argc; i++) {
+		caesar_chiffre(k, argv[i]);
+		printf("\n");
+    }
+	
+	return 0;
+}
+
+void caesar_chiffre(int k, const char *remaining_text){
 	while (*remaining_text != '\0') {
 		const char crypt = *remaining_text;
 		char encrypted = crypt;
@@ -22,6 +32,4 @@ int main(int argc, const char *argv[]) {
 		printf("%c", encrypted);
 		remaining_text++;
     }
-	
-	return 0;
 }
