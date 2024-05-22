@@ -34,4 +34,9 @@ extern unsigned int bitsetCount(unsigned char bits[], unsigned int len_in_bits);
  */
 extern void bitsetPrint(unsigned char bits[], unsigned int len_in_bits);
 
+/**
+ * Gibt alle Bits als Zahl 0 oder 1 aus, abhängig davon,
+ * ob sie aktiv sind
+*/
+extern void bitsetPrintBinary(unsigned char bits[], unsigned int len_in_bits);
 #endif
