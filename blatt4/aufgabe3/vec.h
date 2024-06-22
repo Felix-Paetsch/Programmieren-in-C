@@ -72,7 +72,8 @@ extern void* vecPush(void *self, size_t size);
     vecPush(myVec, 0.5);
 ```
  */
-#define vecPush(self, ...) // TODO: Makrodefinition
+#define vecPush(self, ...) \
+    self = vecPush(self, sizeof(__VA_ARGS__)), self[vecLen(self) - 1] = __VA_ARGS__
 
 /**
  * @internal
@@ -97,14 +98,16 @@ extern void vecPop(void *self);
     x = vecPop(myVec); // ergibt 2.5
 ```
  */
-#define vecPop(self) // TODO: Makrodefinition
+#define vecPop(self) \
+    *(self + vecLen(self) - 1), (vecPop)(self)
 
 /**
  * @brief Gibt das letzte Element des Vektors zurück.
  * @param self  Der Vektor
  * @return Referenz auf das oberste Element von \p self
  */
-#define vecTop(self) // TODO: Makrodefinition
+#define vecTop(self) \
+    self + vecLen(self) - 1
 
 /**
  * Durchläuft jedes Element des Vektors in Reihenfolge.
@@ -140,5 +143,8 @@ extern int vecIsEmpty(const void *self);
  * @return Anzahl der Elemente in \p self
  */
 extern size_t vecLen(const void *self);
+
+#define DEFINE_VAR(TYPE, VAR) TYPE *VAR = NULL
+
 
 #endif /* VEC_H_INCLUDED */

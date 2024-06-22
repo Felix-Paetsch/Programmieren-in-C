@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h> // Include string.h to use memcpy
 
 #include "vec.h"
 
@@ -20,24 +21,61 @@
  * gleichen Namens existieren und der Präprozessor diese expandieren würde) */
 
 void vecDrop(void *self) {
-	TODO("vecDrop implementieren");
+	if (self == NULL){
+		return;
+	}
+
+	VecHeader* header_ptr = (VecHeader*) self - 1;
+	free(header_ptr);
 }
 
 void* (vecPush)(void *self, size_t size) {
-	TODO("vecPush implementieren");
-	return NULL;
+	if (self == NULL){
+		size_t alloc_size = sizeof(VecHeader) + size;
+		VecHeader* header_ptr  = malloc(alloc_size);
+		*header_ptr = (VecHeader) {
+			.len = 1,
+			.cap = alloc_size
+		};
+		return header_ptr + 1;
+	}
+	
+	VecHeader* header_ptr = (VecHeader*) self - 1;
+	if ((header_ptr->len + 1) * size <= header_ptr->cap - sizeof(VecHeader)){
+		header_ptr->len = header_ptr->len + 1;
+		return self;
+	}
+
+	size_t new_len    = header_ptr->len + 1;
+	size_t alloc_size = sizeof(VecHeader) + size*new_len;
+
+	VecHeader* new_header_ptr = (VecHeader*) realloc(header_ptr, alloc_size);
+	*new_header_ptr = (VecHeader) {
+		.len = new_len,
+		.cap = alloc_size
+	};
+	
+	return new_header_ptr + 1;
 }
 
 void (vecPop)(void *self) {
-	TODO("vecPop implementieren");
+	if (vecIsEmpty(self)){
+		return;
+	}
+
+	VecHeader* header_ptr = (VecHeader*) self - 1;
+	header_ptr->len = header_ptr->len - 1;
 }
 
 int vecIsEmpty(const void *self) {
-	TODO("vecIsEmpty implementieren");
-	return 1;
+	return vecLen(self) == 0;
 }
 
 size_t vecLen(const void *self) {
-	TODO("vecLen implementieren");
-	return 0;
+	if (self == NULL){
+		return 0;
+	}
+
+	const VecHeader* header_ptr = (VecHeader*) self - 1;
+	return header_ptr->len;
 }
