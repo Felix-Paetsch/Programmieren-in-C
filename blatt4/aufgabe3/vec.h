@@ -144,7 +144,4 @@ extern int vecIsEmpty(const void *self);
  */
 extern size_t vecLen(const void *self);
 
-#define DEFINE_VAR(TYPE, VAR) TYPE *VAR = NULL
-
-
 #endif /* VEC_H_INCLUDED */
